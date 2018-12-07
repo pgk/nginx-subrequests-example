@@ -1,0 +1,26 @@
+<!doctype html>
+	<html>
+	<head>
+			<title>Nginx Subrequests Example</title>
+	</head>
+	<body>
+		<h1>Cookie-based Authentication</h1>
+			{% if not logged_in %}
+			<form action="/login" method="post">
+				<input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+				<button type="submit">Login</button>
+			</form>
+			{% else %}
+			<form action="/logout" method="post">
+				<input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+				<button type="submit">Logout</button>
+			</form>
+			{% endif %}
+			<div class="content">
+					<p>Try me!!</p>
+					<video src="https://demos.kountanis.com/vid/test_vid_hd.mp4" type="video/mp4" controls="controls" width="300"
+		 height="200">Video not supported</video>
+
+			</div>
+	</body>
+	</html>
