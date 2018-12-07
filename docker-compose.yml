@@ -10,7 +10,7 @@ services:
   nginx:
     image: "nginx"
     ports:
-     - "8080:80"
+     - "3110:80"
     volumes:
      - ./frontend/html:/usr/share/nginx/html
      - ./frontend/conf/default.conf:/etc/nginx/conf.d/default.conf
