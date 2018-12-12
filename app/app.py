@@ -1,6 +1,7 @@
 """Subrequest example."""
 
-from flask import Flask, Response, request, make_response, render_template, redirect, url_for, session, abort
+from flask import Flask, Response, request, make_response, render_template
+from flask import redirect, url_for, session, abort
 from urllib.parse import urlparse
 import string
 from random import randint, choice
@@ -54,13 +55,13 @@ def login():
         if token not in valid_tokens:
             valid_tokens.add(token)
     res = make_response(redirect('https://demos.kountanis.com/app'))
-    res.set_cookie(AUTH_PARAM_NAME, token)
+    res.set_cookie(AUTH_PARAM_NAME, token, domain='.kountanis.com')
     return res
 
 @app.route('/logout', methods=('POST',))
 def logout():
     res = make_response(redirect('https://demos.kountanis.com/app'))
-    res.set_cookie(AUTH_PARAM_NAME, '', expires=0)
+    res.set_cookie(AUTH_PARAM_NAME, '', expires=0, domain='.kountanis.com')
     return res
 
 
@@ -68,6 +69,8 @@ def logout():
 def auth():
     """Authorize using cookie."""
     original_url = request.headers.get('x-original-uri', None)
+    if original_url != '/vid/test_vid_hd.mp4':
+        return Response('OK', 200)
 
     auth_cookie = request.cookies.get(AUTH_PARAM_NAME, None)
     if auth_cookie is None:
@@ -76,6 +79,13 @@ def auth():
         return Response('Unauthorized', 401)
 
     return Response('OK', 200)
+
+
+@app.route('/other')
+def index_demos_one():
+    logged_in = request.cookies.get(AUTH_PARAM_NAME, None) is not None
+    res = make_response(render_template('index_other.html', logged_in=logged_in))
+    return res
 
 
 if __name__ == "__main__":
